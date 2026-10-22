@@ -24,13 +24,22 @@ export function NeedStep({ need, setNeed, meta, onNext }: {
   meta: Meta | null;
   onNext: (text?: string) => void;
 }) {
+  const taRef = useRef<HTMLTextAreaElement>(null);
+  const growTa = (el: HTMLTextAreaElement | null) => {
+    if (!el) return;
+    el.style.height = "auto";
+    el.style.height = `${el.scrollHeight}px`;
+  };
+  useEffect(() => growTa(taRef.current), []);
   return (
     <>
       <img className="wz-art fadein" src="/img/hero.webp" width={960} height={480} alt="" />
       <StepHead title="چی می‌خوای بخری؟" sub="مدلش رو نمی‌دونی؟ اشکالی نداره، همون‌طور که به فروشنده می‌گی بنویس." />
-      <form className="wz-field" onSubmit={(e) => { e.preventDefault(); if (need.trim()) onNext(); }}>
-        <input value={need} onChange={(e) => setNeed(e.target.value)} enterKeyHint="next" aria-label="کالایی که می‌خواهید"
-          placeholder="مثلاً: هدفون بی‌سیم ارزون" />
+      <form className="wz-field grow-field" onSubmit={(e) => { e.preventDefault(); if (need.trim()) onNext(); }}>
+        <textarea ref={taRef} rows={1} value={need}
+          onChange={(e) => { setNeed(e.target.value); growTa(e.target); }}
+          onKeyDown={(e) => { if (e.key === "Enter" && !e.shiftKey) { e.preventDefault(); if (need.trim()) onNext(); } }}
+          aria-label="کالایی که می‌خواهید" placeholder="مثلاً: هدفون بی‌سیم ارزون" />
       </form>
       {meta && !meta.llm.available && (
         <div className="notice"><Icon name="info" size={16} /> دستیار هوشمند الان در دسترس نیست؛ با جستجوی ساده پیدا می‌کنم.</div>

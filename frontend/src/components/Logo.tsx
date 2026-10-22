@@ -1,3 +1,13 @@
+/** The radish mark itself spinning: opacity and saturation breathe with the rotation so it reads as
+    "thinking" rather than a plain mechanical spin. Drop-in replacement for the old ring spinner. */
+export function LogoSpinner({ size = 48 }: { size?: number }) {
+  return (
+    <span className="logo-spin" style={{ width: size, height: size }}>
+      <RadishLogo size={size} />
+    </span>
+  );
+}
+
 /** Torob's radish mark (same paths and colours as torob.com). */
 export function RadishLogo({ size = 32 }: { size?: number }) {
   return (

@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
 import { fa, short, toman } from "../../fmt";
 import { Icon } from "../../icons";
+import { AiNote } from "../bits";
+import { LogoSpinner } from "../Logo";
 import type { GenAnswer, GenScreen } from "../../types";
 import { Img } from "../Products";
 import { Choice, StepHead, WizFoot } from "./Shell";
@@ -37,7 +39,7 @@ export function GenWait({ onBack }: { onBack: () => void }) {
   return (
     <>
       <div className="wz-wait fadein">
-        <span className="wz-spin" />
+        <LogoSpinner />
         <b>دارم صفحهٔ بعد رو می‌سازم…</b>
         <span className="meta">هوش مصنوعی از روی جواب‌هات تصمیم می‌گیره چی بپرسه</span>
       </div>
@@ -145,10 +147,13 @@ function GenProducts({ s, busy, onBack, onPick, onAnswer, onRestart }: {
         <p className="footnote"><Icon name="info" size={13} /> هیچ‌کدوم از این‌ها این دور و بر فروشگاه نداره؛ توی صفحهٔ بعد وسیله یا محدوده رو عوض کن.</p>
       )}
       {ask ? (
-        <form className="wz-field sm fadein" onSubmit={(e) => { e.preventDefault(); if (more.trim()) onAnswer({ q: "توضیح بیشتر", a: more.trim() }); }}>
-          <input autoFocus value={more} onChange={(e) => setMore(e.target.value)} placeholder="مثلاً: ارزون‌تر، یا فقط سامسونگ" aria-label="توضیح بیشتر" />
-          <button className="sendbtn" type="submit" disabled={busy || !more.trim()} aria-label="ارسال"><Icon name="up" size={20} stroke={2} /></button>
-        </form>
+        <>
+          <AiNote title="بگو دقیقاً دنبال چی هستی">تا جایی که بشه با همین توضیح دوباره بگردم؛ مثلاً ارزون‌تر، فقط یه برند خاص، یا مدلی که اینجا نیست.</AiNote>
+          <form className="wz-field sm fadein" onSubmit={(e) => { e.preventDefault(); if (more.trim()) onAnswer({ q: "توضیح بیشتر", a: more.trim() }); }}>
+            <input autoFocus value={more} onChange={(e) => setMore(e.target.value)} placeholder="مثلاً: ارزون‌تر، یا فقط سامسونگ" aria-label="توضیح بیشتر" />
+            <button className="sendbtn" type="submit" disabled={busy || !more.trim()} aria-label="ارسال"><Icon name="up" size={20} stroke={2} /></button>
+          </form>
+        </>
       ) : (
         <button className="textbtn center" onClick={() => setAsk(true)}>هیچ‌کدوم نیست؟ دقیق‌تر بگو</button>
       )}
